@@ -31,11 +31,43 @@ public class LZ4StreamTest {
         randomContent = new byte[randomContentLength];
         rand.nextBytes(randomContent);
 
+        compressContent();
+    }
+    
+    private void compressContent() throws IOException {
         ByteArrayOutputStream compressedOutputStream = new ByteArrayOutputStream();
 
         LZ4OutputStream os = new LZ4OutputStream(compressedOutputStream);
-
-        os.write(randomContent);
+        int currentContentPosition = 0;
+        
+        while(currentContentPosition < randomContent.length) {
+            int testBlockSize = rand.nextInt(500000);
+            
+            if(testBlockSize > randomContent.length - currentContentPosition)
+                testBlockSize = randomContent.length - currentContentPosition;
+            
+            boolean writeByteByByte = true; //rand.nextBoolean();
+            
+            if(writeByteByByte) {
+                for(int i=0;i<testBlockSize;i++) {
+                    os.write(randomContent[currentContentPosition++]);
+                }
+            } else {
+                boolean writeDirectlyFromContent = rand.nextBoolean();
+                
+                if(writeDirectlyFromContent) {
+                    os.write(randomContent, currentContentPosition, testBlockSize);
+                } else {
+                    byte b[] = new byte[testBlockSize];
+                    System.arraycopy(randomContent, currentContentPosition, b, 0, testBlockSize);
+                    os.write(b);
+                }
+                currentContentPosition += testBlockSize;
+            }
+            
+        }
+        
+        os.close();
 
         compressedOutput = compressedOutputStream.toByteArray();
     }
@@ -106,6 +138,9 @@ public class LZ4StreamTest {
     }
 
     private void assertEqualContent(byte readContent[], int uncompressedContentOffset, int readContentLength) {
+        if(readContentLength < 0 && uncompressedContentOffset < randomContent.length)
+            Assert.fail("Decompressed content was incomplete.  Index " + uncompressedContentOffset + ".  Seed was " + seed);
+        
         for(int i=0;i<readContentLength;i++) {
             String message = "Bytes differed! Seed value was " + seed;
             Assert.assertEquals(message, randomContent[uncompressedContentOffset + i], readContent[i]);

@@ -105,7 +105,7 @@ public class LZ4InputStream extends InputStream {
     }
 
     private boolean blockHeadersIndicateNoMoreData(int compressedBufferLength, int decompressedBufferLength) {
-        return compressedBufferLength <= 0 || decompressedBufferLength <= 0;
+        return compressedBufferLength < 0 || decompressedBufferLength < 0;
     }
 
     private boolean fillCompressedBuffer(int compressedBufferLength) throws IOException {
