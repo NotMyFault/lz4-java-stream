@@ -23,7 +23,7 @@ dependencies {
 }
 
 version = "1.0.0-SNAPSHOT"
-group = "net.jpountz.lz4-java-stream"
+group = "net.jpountz"
 
 publishing {
     publications {
