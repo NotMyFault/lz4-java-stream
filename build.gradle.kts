@@ -22,7 +22,7 @@ dependencies {
     api("junit:junit:4.13.2")
 }
 
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 group = "net.jpountz"
 
 publishing {
@@ -33,14 +33,6 @@ publishing {
             from(components["java"])
 
             pom {
-                licenses {
-                    license {
-                        name.set("GNU General Public License, Version 3.0")
-                        url.set("https://www.gnu.org/licenses/gpl-3.0.html")
-                        distribution.set("repo")
-                    }
-                }
-
                 scm {
                     url.set("https://github.com/NotMyFault/lz4-java-stream")
                     connection.set("scm:https://NotMyFault@github.com/IntellectualSites/lz4-java-stream.git")

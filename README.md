@@ -6,25 +6,25 @@ Build on jpountz's great lz4-java
 ## Gradle
 ```kotlin
 repositories {
-    maven { url = uri("https://mvn.intellectualsites.com/content/repositories/snapshots/") }
+    maven { url = uri("https://mvn.intellectualsites.com/content/repositories/releases/") }
 }
 
 dependencies {
-    implementation("net.jpountz:lz4-java-stream:1.0.0-SNAPSHOT")
+    implementation("net.jpountz:lz4-java-stream:1.0.0")
 }
 ```
 
 ## Maven
 ```xml
 <repository>
-  <id>IntellectualSites' Snapshots</id>
-  <url>https://mvn.intellectualsites.com/content/repositories/snapshots/</url>
+  <id>IntellectualSites' Releases</id>
+  <url>https://mvn.intellectualsites.com/content/repositories/releases/</url>
 </repository>
 
 <dependency>
   <groupId>net.jpountz</groupId>
   <artifactId>lz4-java-stream</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
