@@ -10,8 +10,8 @@ public class LZ4InputStream extends InputStream {
     private final InputStream inputStream;
     private final LZ4Decompressor decompressor;
 
-    private byte compressedBuffer[] = new byte[1048576];
-    private byte decompressedBuffer[] = new byte[1048576];
+    private byte[] compressedBuffer = new byte[1048576];
+    private byte[] decompressedBuffer = new byte[1048576];
     private int decompressedBufferPosition = 0;
     private int decompressedBufferLength = 0;
 
