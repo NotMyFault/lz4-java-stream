@@ -10,8 +10,8 @@ public class LZ4OutputStream extends OutputStream {
     private final byte[] compressionInputBuffer;
     private final byte[] compressionOutputBuffer;
     private final OutputStream underlyingOutputStream;
-    private int bytesRemainingInCompressionInputBuffer = 0;
-    private int currentCompressionInputBufferPosition = 0;
+    private int bytesRemainingInCompressionInputBuffer;
+    private int currentCompressionInputBufferPosition;
 
     public LZ4OutputStream(OutputStream os) throws IOException {
         this(os, ONE_MEGABYTE);

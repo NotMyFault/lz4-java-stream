@@ -1,17 +1,17 @@
 package net.jpountz.lz4;
 
-import static junit.framework.Assert.assertEquals;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class LZ4StreamTest {
 
@@ -33,29 +33,29 @@ public class LZ4StreamTest {
 
         compressContent();
     }
-    
+
     private void compressContent() throws IOException {
         ByteArrayOutputStream compressedOutputStream = new ByteArrayOutputStream();
 
         LZ4OutputStream os = new LZ4OutputStream(compressedOutputStream);
         int currentContentPosition = 0;
-        
-        while(currentContentPosition < randomContent.length) {
+
+        while (currentContentPosition < randomContent.length) {
             int testBlockSize = rand.nextInt(500000);
-            
-            if(testBlockSize > randomContent.length - currentContentPosition)
+
+            if (testBlockSize > randomContent.length - currentContentPosition)
                 testBlockSize = randomContent.length - currentContentPosition;
-            
+
             boolean writeByteByByte = true; //rand.nextBoolean();
-            
-            if(writeByteByByte) {
-                for(int i=0;i<testBlockSize;i++) {
+
+            if (writeByteByByte) {
+                for (int i = 0; i < testBlockSize; i++) {
                     os.write(randomContent[currentContentPosition++]);
                 }
             } else {
                 boolean writeDirectlyFromContent = rand.nextBoolean();
-                
-                if(writeDirectlyFromContent) {
+
+                if (writeDirectlyFromContent) {
                     os.write(randomContent, currentContentPosition, testBlockSize);
                 } else {
                     byte[] b = new byte[testBlockSize];
@@ -64,9 +64,9 @@ public class LZ4StreamTest {
                 }
                 currentContentPosition += testBlockSize;
             }
-            
+
         }
-        
+
         os.close();
 
         compressedOutput = compressedOutputStream.toByteArray();
@@ -79,15 +79,15 @@ public class LZ4StreamTest {
 
             int currentContentPosition = 0;
 
-            while(currentContentPosition < randomContent.length) {
+            while (currentContentPosition < randomContent.length) {
                 int testBlockSize = rand.nextInt(500000);
 
                 boolean shouldTestBytes = rand.nextBoolean();
 
-                if(shouldTestBytes) {
+                if (shouldTestBytes) {
                     boolean shouldReadOneByOne = rand.nextBoolean();
 
-                    if(shouldReadOneByOne) {
+                    if (shouldReadOneByOne) {
                         currentContentPosition += assertContentByteByByte(is, currentContentPosition, testBlockSize);
                     } else {
                         currentContentPosition += assertContentInSingleBlock(is, currentContentPosition, testBlockSize);
@@ -99,7 +99,7 @@ public class LZ4StreamTest {
 
             assertEquals(-1, is.read(new byte[100]));
             assertEquals(-1, is.read());
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
             Assert.fail("Exception was thrown.  Seed value was " + seed);
         }
@@ -109,13 +109,13 @@ public class LZ4StreamTest {
     private int assertContentByteByByte(InputStream is, int currentContentPosition, int testBlockSize) throws IOException {
         int readContentLength = 0;
 
-        while(readContentLength < testBlockSize) {
+        while (readContentLength < testBlockSize) {
             int readContent = is.read();
 
-            if(readContent == -1)
+            if (readContent == -1)
                 break;
 
-            assertEquals(randomContent[currentContentPosition + readContentLength], (byte)readContent);
+            assertEquals(randomContent[currentContentPosition + readContentLength], (byte) readContent);
             readContentLength++;
         }
 
@@ -138,12 +138,12 @@ public class LZ4StreamTest {
     }
 
     private void assertEqualContent(byte[] readContent, int uncompressedContentOffset, int readContentLength) {
-        if(readContentLength < 0 && uncompressedContentOffset < randomContent.length)
+        if (readContentLength < 0 && uncompressedContentOffset < randomContent.length)
             Assert.fail("Decompressed content was incomplete.  Index " + uncompressedContentOffset + ".  Seed was " + seed);
-        
-        for(int i=0;i<readContentLength;i++) {
+
+        for (int i = 0; i < readContentLength; i++) {
             String message = "Bytes differed! Seed value was " + seed;
-            Assert.assertEquals(message, randomContent[uncompressedContentOffset + i], readContent[i]);
+            assertEquals(message, randomContent[uncompressedContentOffset + i], readContent[i]);
         }
     }
 

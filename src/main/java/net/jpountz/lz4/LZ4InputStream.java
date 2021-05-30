@@ -8,7 +8,7 @@ public class LZ4InputStream extends InputStream {
     private static LZ4Factory factory = LZ4Factory.fastestInstance();
 
     private final InputStream inputStream;
-    private final LZ4Decompressor decompressor;
+    private final LZ4FastDecompressor decompressor;
 
     private byte[] compressedBuffer = new byte[1048576];
     private byte[] decompressedBuffer = new byte[1048576];
@@ -16,7 +16,7 @@ public class LZ4InputStream extends InputStream {
     private int decompressedBufferLength = 0;
 
     public LZ4InputStream(InputStream stream) {
-        this.decompressor = factory.decompressor();
+        this.decompressor = factory.fastDecompressor();
         this.inputStream = stream;
     }
 
